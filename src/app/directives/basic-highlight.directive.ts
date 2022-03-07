@@ -6,6 +6,12 @@ import {
   OnInit,
 } from '@angular/core';
 
+export const LogInConsole = () => {
+  return (target: any, methodName: string, descriptor: any) => {
+    console.log('function ' + methodName + ' called at ' + Date.now());
+  };
+};
+
 @Directive({
   selector: '[appBasicHighlight]',
 })
@@ -44,7 +50,8 @@ export class BasicHighlightDirective implements OnInit {
     this.backgroundColor = this.defaultColor;
   }
 
-  coerceBooleanProperty = (value: any): boolean => {
+  @LogInConsole()
+  coerceBooleanProperty(value: any): boolean {
     return value != null && `${value}` !== 'false';
-  };
+  }
 }
