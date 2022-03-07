@@ -1,13 +1,23 @@
-import { Directive, ElementRef, HostBinding, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostBinding, HostListener, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: '[appBasicHighlight]'
 })
 export class BasicHighlightDirective {
-  @HostBinding('style.backgroundColor') backgroundColor = 'transparent';
+  defaultColor = 'grey';
+  highlightColor = 'green';
+  @HostBinding('style.backgroundColor') backgroundColor: string;
+
 
   constructor() {
-    this.backgroundColor = 'green';
+    this.backgroundColor = this.defaultColor;
   }
 
+  @HostListener('mouseenter') mouseEnter() {
+    this.backgroundColor = this.highlightColor;
+  }
+
+  @HostListener('mouseleave') mouseLeave() {
+    this.backgroundColor = this.defaultColor;
+  }
 }
