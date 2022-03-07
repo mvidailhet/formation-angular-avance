@@ -1,15 +1,17 @@
-import { Directive, ElementRef, HostBinding, HostListener, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostBinding, HostListener, Input, OnInit, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: '[appBasicHighlight]'
 })
-export class BasicHighlightDirective {
-  defaultColor = 'grey';
-  highlightColor = 'green';
-  @HostBinding('style.backgroundColor') backgroundColor: string;
+export class BasicHighlightDirective implements OnInit {
+  @Input() defaultColor = 'grey';
+  @Input() highlightColor = 'green';
+  @HostBinding('style.backgroundColor') backgroundColor!: string;
 
 
-  constructor() {
+  constructor() {}
+
+  ngOnInit(): void {
     this.backgroundColor = this.defaultColor;
   }
 
