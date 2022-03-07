@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import { DirectivesComponent } from './pages/directives/directives.component';
+import { BasicHighlightDirective } from './directives/basic-highlight.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     DirectivesComponent,
+    BasicHighlightDirective,
   ],
   imports: [
     BrowserModule,
