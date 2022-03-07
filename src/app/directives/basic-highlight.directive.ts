@@ -6,11 +6,30 @@ import {
   OnInit,
 } from '@angular/core';
 
-export const LogInConsole = () => {
-  return (target: any, methodName: string, descriptor: any) => {
-    console.log('function ' + methodName + ' called at ' + Date.now());
+export function coerceBooleanProperty(value: any): boolean {
+  return value != null && `${value}` !== 'false';
+}
+
+export function CoerceBoolean() {
+  return (target: any, key: string): void => {
+    const getter = function () {
+      // @ts-ignore
+      return this['_' + key];
+    };
+
+    const setter = function (next: any) {
+      // @ts-ignore
+      this['_' + key] = coerceBooleanProperty(next);
+    };
+
+    Object.defineProperty(target, key, {
+      get: getter,
+      set: setter,
+      enumerable: true,
+      configurable: true,
+    });
   };
-};
+}
 
 @Directive({
   selector: '[appBasicHighlight]',
@@ -21,16 +40,9 @@ export class BasicHighlightDirective implements OnInit {
   @Input('appBasicHighlight') highlightColor!: string;
   @HostBinding('style.backgroundColor') backgroundColor!: string;
 
-  private _disabled: boolean = false;
-
   @Input()
-  get disabled(): boolean {
-    return this._disabled;
-  }
-
-  set disabled(disabled: any) {
-    this._disabled = this.coerceBooleanProperty(disabled);
-  }
+  @CoerceBoolean()
+  disabled: string | boolean = false;
 
   constructor() {}
 
@@ -41,17 +53,12 @@ export class BasicHighlightDirective implements OnInit {
   }
 
   @HostListener('mouseenter') mouseEnter() {
-    if (this._disabled) return;
+    if (this.disabled) return;
     this.backgroundColor = this.highlightColor;
   }
 
   @HostListener('mouseleave') mouseLeave() {
-    if (this._disabled) return;
+    if (this.disabled) return;
     this.backgroundColor = this.defaultColor;
-  }
-
-  @LogInConsole()
-  coerceBooleanProperty(value: any): boolean {
-    return value != null && `${value}` !== 'false';
   }
 }
