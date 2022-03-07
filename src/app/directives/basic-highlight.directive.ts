@@ -1,12 +1,13 @@
-import { Directive, ElementRef, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostBinding, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: '[appBasicHighlight]'
 })
 export class BasicHighlightDirective {
+  @HostBinding('style.backgroundColor') backgroundColor = 'transparent';
 
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) {
-    //this.elementRef.nativeElement.style.backgroundColor = 'green';
-    this.renderer.setStyle(this.elementRef.nativeElement, 'background-color', 'green');
+  constructor() {
+    this.backgroundColor = 'green';
   }
+
 }
