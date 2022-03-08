@@ -8,6 +8,7 @@ import { DirectivesComponent } from './pages/directives/directives.component';
 import { BasicHighlightDirective } from './directives/basic-highlight.directive';
 import { MemoizeComponent } from './pages/memoize/memoize.component';
 import { SliderViewChildComponent } from './pages/slider-view-child/slider-view-child.component';
+import { ObservablesComponent } from './pages/observables/observables.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { SliderViewChildComponent } from './pages/slider-view-child/slider-view-
     BasicHighlightDirective,
     MemoizeComponent,
     SliderViewChildComponent,
+    ObservablesComponent,
   ],
   imports: [
     BrowserModule,
