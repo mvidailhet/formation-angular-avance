@@ -2,16 +2,15 @@ import { Component } from '@angular/core';
 
 import * as memoizee from 'memoizee';
 
-function add(a: number, b: number): number {
-  console.log('add is called');
-  return a + b;
-}
-
-const memoizedAdd = memoizee(add);
-
-memoizedAdd(1, 2); // log "add is called"
-memoizedAdd(1, 2); // cache hit, not logging
-memoizedAdd(1, 3); // log "add is called"
+export function Memoize() {
+  return function(target: any, key: string, descriptor: any) {
+    const oldFunction = descriptor.value;
+    const newFunction = memoizee(oldFunction);
+    descriptor.value = function () {
+      return newFunction.apply(this, arguments);
+    };
+  };
+};
 
 @Component({
   selector: 'app-memoize',
@@ -22,7 +21,8 @@ export class MemoizeComponent {
   framework = 'Angular';
   count = 0;
 
-  getTitle(framework: string): string {
+  @Memoize()
+  getTitle(framework: string) {
     console.log('getTitle is called');
     return `I love ${framework.toUpperCase()}`;
   }
