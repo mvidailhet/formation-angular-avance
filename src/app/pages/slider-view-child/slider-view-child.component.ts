@@ -1,5 +1,5 @@
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import ImageCompare from "image-compare-viewer";
 
 @Component({
@@ -8,14 +8,11 @@ import ImageCompare from "image-compare-viewer";
   styleUrls: ['./slider-view-child.component.scss']
 })
 export class SliderViewChildComponent implements AfterViewInit {
-
-  constructor() { }
+  @ViewChild('imageCompare') imageCompareElt!: ElementRef;
 
   ngAfterViewInit(): void {
-    console.log('ici');
-    const element = document.getElementById("image-compare");
-    console.log(element);
-    const viewer = new ImageCompare(element).mount();
+    const element = this.imageCompareElt.nativeElement;
+    new ImageCompare(element).mount();
   }
 
 }
