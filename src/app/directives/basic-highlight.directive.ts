@@ -12,13 +12,11 @@ export function coerceBooleanProperty(value: any): boolean {
 
 export function CoerceBoolean() {
   return (target: any, key: string): void => {
-    const getter = function () {
-      // @ts-ignore
+    const getter = function (this: any) {
       return this['_' + key];
     };
 
-    const setter = function (next: any) {
-      // @ts-ignore
+    const setter = function (this: any, next: any) {
       this['_' + key] = coerceBooleanProperty(next);
     };
 
