@@ -38,7 +38,7 @@ export class ApiService {
     console.error(error);
   }
 
-  getPokemonList(): Observable<Pokemon[]> {
+  getPokemonList(): Observable<Pokemon[] | undefined> {
     return this.httpClient
       .get('https://pokeapi.co/api/v2/pokemon?limit=10')
       .pipe(

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Pokemon } from 'src/app/models/pokemon';
-import { ApiService } from 'src/app/services/api.service';
+import { PokemonService } from 'src/app/services/pokemon.service';
 
 @Component({
   selector: 'app-pokemons',
@@ -10,10 +10,12 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class PokemonsComponent {
   pokemons: Pokemon[] | undefined;
-  pokemons$: Observable<Pokemon[]> = this.apiService.getPokemonList();
+  pokemons$: Observable<Pokemon[] | undefined> = this.pokemonService.getPokemonList();
 
-  constructor(private apiService: ApiService) {
-    this.pokemons$.subscribe((pokemons: Pokemon[]) => {
+  constructor(private pokemonService: PokemonService) {
+    this.pokemons$.subscribe((pokemons: Pokemon[] | undefined) => {
+      console.log('got pokemons');
+      console.log(pokemons);
       this.pokemons = pokemons;
     });
   }
