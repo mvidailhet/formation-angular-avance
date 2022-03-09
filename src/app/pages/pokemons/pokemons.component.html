@@ -1,0 +1,13 @@
+<h2>Pokemons</h2>
+<ul>
+  <li *ngFor="let pokemon of pokemons">
+    {{ pokemon.name }}
+  </li>
+</ul>
+
+<h2>Async pokemons</h2>
+<ul>
+  <li *ngFor="let pokemon of pokemons$ | async">
+    {{ pokemon.name }}
+  </li>
+</ul>
