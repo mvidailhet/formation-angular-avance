@@ -47,7 +47,6 @@ export class ApiService {
           return of([]); // On retourne un tableau vide en cas d'erreur
         }),
         tap((response: any) => {
-          console.log('calling api');
           console.log(response);
           this.nextPokemonsUrl = response.next;
         }), // On "tap" dans les données pour y récupérer ce qui nous intéresse
