@@ -11,6 +11,7 @@ import { SliderViewChildComponent } from './pages/slider-view-child/slider-view-
 import { ObservablesComponent } from './pages/observables/observables.component';
 import { PokemonsComponent } from './pages/pokemons/pokemons.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ScreenResizeComponent } from './pages/screen-resize/screen-resize.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
     SliderViewChildComponent,
     ObservablesComponent,
     PokemonsComponent,
+    ScreenResizeComponent,
   ],
   imports: [
     BrowserModule,
