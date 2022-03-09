@@ -5,6 +5,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { MemoizeComponent } from './pages/memoize/memoize.component';
 import { ObservablesComponent } from './pages/observables/observables.component';
 import { PokemonsComponent } from './pages/pokemons/pokemons.component';
+import { ScreenResizeComponent } from './pages/screen-resize/screen-resize.component';
 import { SliderViewChildComponent } from './pages/slider-view-child/slider-view-child.component';
 
 const routes: Routes = [
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: 'pokemons',
     component: PokemonsComponent,
+  },
+  {
+    path: 'screen-resize',
+    component: ScreenResizeComponent,
   },
 ];
 
