@@ -39,7 +39,6 @@ export class PokemonService {
 
   getPokemonList(): Observable<Pokemon[] | undefined> {
     return this.storagePokemons$.pipe(
-      tap((pokemons: Pokemon[] | undefined) => console.log(pokemons)),
       switchMap((pokemons: Pokemon[] | undefined) => {
         if (!pokemons) {
           return this.apiService.getPokemonList().pipe(
