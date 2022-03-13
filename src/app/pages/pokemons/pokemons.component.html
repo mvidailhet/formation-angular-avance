@@ -6,8 +6,16 @@
 </ul>
 
 <h2>Async pokemons</h2>
-<ul>
-  <li *ngFor="let pokemon of pokemons$ | async">
+<ul *ngIf="pokemons$ | async as asyncPokemons; else: loadingOrError">
+  <li *ngFor="let pokemon of asyncPokemons">
     {{ pokemon.name }}
   </li>
 </ul>
+
+<ng-template #loadingOrError>
+  <ng-container *ngIf="errorObject; else loading">
+    {{ errorObject }}
+  </ng-container>
+
+  <ng-template #loading> Loading ... </ng-template>
+</ng-template>

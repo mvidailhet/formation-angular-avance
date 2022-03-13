@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, of, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { Pokemon } from '../models/pokemon';
 
 export enum PokemonTypeEnum {
@@ -44,7 +44,7 @@ export class ApiService {
       .pipe(
         catchError((error) => {
           this.handleHttpError(error);
-          return of([]); // On retourne un tableau vide en cas d'erreur
+          return throwError(() => new Error(error));
         }),
         tap((response: any) => {
           console.log(response);
