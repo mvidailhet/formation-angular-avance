@@ -10,8 +10,9 @@ import { MemoizeComponent } from './pages/memoize/memoize.component';
 import { SliderViewChildComponent } from './pages/slider-view-child/slider-view-child.component';
 import { ObservablesComponent } from './pages/observables/observables.component';
 import { PokemonsComponent } from './pages/pokemons/pokemons.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ScreenResizeComponent } from './pages/screen-resize/screen-resize.component';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -25,12 +26,10 @@ import { ScreenResizeComponent } from './pages/screen-resize/screen-resize.compo
     PokemonsComponent,
     ScreenResizeComponent,
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule
+  imports: [BrowserModule, HttpClientModule, AppRoutingModule],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

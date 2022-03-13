@@ -70,9 +70,14 @@ export class AuthInterceptor implements HttpInterceptor {
     if (!this.token) return request;
 
     // If you are calling an outside domain then do not add the token.
-    if (!request.url.match(/www.mydomain.com\//)) {
+    if (!request.url.match(/pokeapi.co\/api\//)) {
       return request;
     }
+
+    console.log('Interceptor adding token to request header');
+    console.log(request);
+
+
     return request.clone({
       headers: request.headers.set(this.AUTH_HEADER, "Bearer " + this.token)
     });
