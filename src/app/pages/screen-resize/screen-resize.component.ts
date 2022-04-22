@@ -1,53 +1,80 @@
 import { Component, HostListener } from '@angular/core';
-import { BehaviorSubject, sampleTime, Subject, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  EMPTY,
+  Observable,
+  of,
+  sampleTime,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { SCREEN_SIZE_BREAKPOINTS } from './screen-size-breakpoints.enum';
 
 @Component({
   selector: 'app-screen-resize',
   templateUrl: './screen-resize.component.html',
-  styleUrls: ['./screen-resize.component.scss']
+  styleUrls: ['./screen-resize.component.scss'],
 })
 export class ScreenResizeComponent {
+  private _onResize$ = new BehaviorSubject<number>(window.innerWidth);
   private _currentScreenWidth: number | undefined;
-  private _currentScreenSizeBreakpoint: SCREEN_SIZE_BREAKPOINTS | undefined;
-  private _onResize$ = new BehaviorSubject(undefined);
-
-  screenSizeBreakpointChanged$: Subject<SCREEN_SIZE_BREAKPOINTS> = new Subject();
+  private _currentBreakpoint: SCREEN_SIZE_BREAKPOINTS | undefined;
+  screenSizeBreakpointChanged$: Observable<SCREEN_SIZE_BREAKPOINTS> | undefined;
   currentScreenSizeBreakpointKey: string | undefined;
 
   @HostListener('window:resize') windowResize() {
-    this._onResize$.next(undefined);
+    this._onResize$.next(window.innerWidth);
   }
 
   constructor() {
-    this.subscribeToScreenResize();
-
-    this.screenSizeBreakpointChanged$.subscribe((newSizeBreakpoint: SCREEN_SIZE_BREAKPOINTS) => {
-      this.currentScreenSizeBreakpointKey = SCREEN_SIZE_BREAKPOINTS[newSizeBreakpoint];
-    });
+    this.createObservables();
+    this.subscribeToObservable();
   }
 
-  private subscribeToScreenResize() {
-    this._onResize$.pipe(
+  createObservables() {
+    const onResize$ = this._onResize$.pipe(
       tap(() => console.log('resized')),
-      sampleTime(500),
-      ).subscribe(() => {
-      console.log('checking resize');
-      this.detectScreenSizeBreakpoint();
-    });
+      sampleTime(500)
+    );
+
+    this.screenSizeBreakpointChanged$ = onResize$.pipe(
+      switchMap((screenWidth: number) => {
+        const newBreakpoint = this.detectScreenSizeBreakpoint(screenWidth);
+        if (!newBreakpoint) return EMPTY;
+        return of(newBreakpoint);
+      })
+    );
   }
 
-  private detectScreenSizeBreakpoint() {
-    const screenWidth = window.innerWidth;
+  subscribeToObservable() {
+    if (!this.screenSizeBreakpointChanged$) return;
 
-    if (!this._currentScreenWidth || screenWidth !== this._currentScreenWidth) {
-      const newScreenSizeBreakpoint = this.getScreenSizeBreakpoint(screenWidth);
-      if (newScreenSizeBreakpoint !== this._currentScreenSizeBreakpoint) {
-        this.screenSizeBreakpointChanged$.next(newScreenSizeBreakpoint);
+    this.screenSizeBreakpointChanged$.subscribe(
+      (breakpoint: SCREEN_SIZE_BREAKPOINTS) => {
+        this.currentScreenSizeBreakpointKey =
+          SCREEN_SIZE_BREAKPOINTS[breakpoint];
+        console.log('new breakpoint !', this.currentScreenSizeBreakpointKey);
       }
-      this._currentScreenSizeBreakpoint = newScreenSizeBreakpoint;
-      this._currentScreenWidth = screenWidth;
+    );
+  }
+
+  ngOnDestroy(): void {
+    this._onResize$.complete();
+  }
+
+  private detectScreenSizeBreakpoint(
+    screenWidth: number
+  ): SCREEN_SIZE_BREAKPOINTS | undefined {
+    if (screenWidth !== this._currentScreenWidth) {
+      const newBreakpoint = this.getScreenSizeBreakpoint(screenWidth);
+      if (newBreakpoint !== this._currentBreakpoint) {
+        this._currentBreakpoint = newBreakpoint;
+        return newBreakpoint;
+      }
+      this._currentBreakpoint = newBreakpoint;
     }
+    this._currentScreenWidth = screenWidth;
+    return;
   }
 
   private getScreenSizeBreakpoint(screensize: number): SCREEN_SIZE_BREAKPOINTS {
@@ -65,5 +92,4 @@ export class ScreenResizeComponent {
     }
     return SCREEN_SIZE_BREAKPOINTS.XL;
   }
-
 }
